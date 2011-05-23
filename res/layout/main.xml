@@ -4,8 +4,8 @@ android:layout_width="fill_parent"
 android:layout_height="fill_parent" android:orientation="vertical">
 
 	<LinearLayout android:layout_height="wrap_content" android:id="@+id/linearLayout1" android:layout_width="match_parent">
-	    <Button android:text="Start" android:id="@+id/stateButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="1"></Button>
-	    <Button android:text="Czyść" android:id="@+id/clearButton"  android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="1"></Button>
+	    <Button android:text="@string/start" android:id="@+id/stateButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="1"></Button>
+	    <Button android:text="@string/clear" android:id="@+id/clearButton"  android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="1"></Button>
 	</LinearLayout>
 	
 	<ImageView android:id="@+id/spectrum" android:layout_width="match_parent" android:layout_height="100px"></ImageView>

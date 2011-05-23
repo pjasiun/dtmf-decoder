@@ -21,16 +21,14 @@ public class Controller
 		{
 			started = true;
 			
-			mainActivity.setStateButtonText("Stop");
-			mainActivity.setEnabled(true);
+			mainActivity.start();
 			
 			recordTask = new RecordTask(this);
 			recordTask.execute();
 		} else {
 			started = false;
 			
-			mainActivity.setStateButtonText("Start");
-			mainActivity.setEnabled(false);
+			mainActivity.stop();
 			
 			recordTask.cancel(true);
 		}
@@ -42,7 +40,8 @@ public class Controller
 	}
 
 
-	public int getAudioSource() {
+	public int getAudioSource()
+	{
 		return mainActivity.getAudioSource();
 	}
 

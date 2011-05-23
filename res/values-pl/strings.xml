@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Dekoder DTMF</string>
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
+    <string name="clear">Czyść</string>
+    <string name="history">Historia</string>
+    <string name="send">Wyślij</string>
+    <string name="about">O programie</string>
+    <string name="empty_history">Historia rozpoznań jest pusta</string>
+    <string name="about_text">Dekoder DTMF umożliwia rozpoznawanie dźwięków tonalnych generowanych przez telefony. Aplikacja pozwala wyslać numer oraz wyświetlać historię rozpoznanych numerów.</string>
+</resources>
