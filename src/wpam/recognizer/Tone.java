@@ -7,7 +7,7 @@ public class Tone {
 	
 	private char key;
 	
-	private static int FREQUENCY_DELTA = 1;
+	private static int FREQUENCY_DELTA = 2;
 	
 	public Tone(int lowFrequency, int highFrequency, char key) 
 	{
@@ -39,6 +39,7 @@ public class Tone {
 		return false;
 	}
 
+	
 	private boolean match(int frequency, boolean[] distincts) 
 	{
 		for(int i = frequency - FREQUENCY_DELTA; i <= frequency + FREQUENCY_DELTA; ++i)
@@ -48,5 +49,20 @@ public class Tone {
 		return false;
 	}
 
+	public boolean match(int lowFrequency, int highFrequency) 
+	{
+		if(matchFrequency(lowFrequency, this.lowFrequency) && matchFrequency(highFrequency, this.highFrequency))
+			return true;
+		
+		return false;
+	}
+	
+	private boolean matchFrequency(int frequency, int frequencyPattern)
+	{
+		if((frequency - frequencyPattern) * (frequency - frequencyPattern) < FREQUENCY_DELTA * FREQUENCY_DELTA)
+			return true;
+		
+		return false;
+	}
 
 }

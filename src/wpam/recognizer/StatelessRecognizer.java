@@ -3,12 +3,12 @@ package wpam.recognizer;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class Recognizer {
+public class StatelessRecognizer {
 
 	private Spectrum spectrum;
 	private Collection<Tone> tones;
 
-	public Recognizer(Spectrum spectrum) 
+	public StatelessRecognizer(Spectrum spectrum) 
 	{
 		this.spectrum = spectrum;
 		
@@ -34,12 +34,14 @@ public class Recognizer {
 
 	public char getRecognizedKey()
 	{
-		SpectrumFragment spectrumFragment= new SpectrumFragment(80, 200, spectrum);
+		SpectrumFragment lowFragment= new SpectrumFragment(80, 130, spectrum);
+		SpectrumFragment highFragment= new SpectrumFragment(150, 200, spectrum);
 		
-		boolean[] distincts = spectrumFragment.getDistincts();
+		int lowMax = lowFragment.getMax();
+		int highMax = highFragment.getMax();
 		
 		for (Tone t : tones) {
-			if(t.isDistrinct(distincts))
+			if(t.match(lowMax, highMax))
 				return t.getKey();
 		}
 		

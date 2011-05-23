@@ -22,6 +22,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
@@ -30,13 +31,15 @@ public class MainActivity extends Activity {
 
 	private Button clearButton;
 	
-	private EditText recognizeredText;
+	private EditText recognizeredEditText;
 
 	private SpectrumView spectrumView;
 	
 	private NumericKeyboard numKeyboard;
 	
 	Controller controller; 
+	
+	private String recognizeredText;
 	
 	public static final String APP_KEY = "806785c1fb7aed8a867039282bc21993eedbc4e4";
 	
@@ -67,8 +70,8 @@ public class MainActivity extends Activity {
 		spectrumView = new SpectrumView(); 
 		spectrumView.setImageView((ImageView) this.findViewById(R.id.spectrum));
 				
-		recognizeredText = (EditText)this.findViewById(R.id.recognizeredText);
-		recognizeredText.setFocusable(false);
+		recognizeredEditText = (EditText)this.findViewById(R.id.recognizeredText);
+		recognizeredEditText.setFocusable(false);
 		
 		numKeyboard = new NumericKeyboard();		
 		numKeyboard.add('0', (Button)findViewById(R.id.button0));
@@ -86,6 +89,8 @@ public class MainActivity extends Activity {
 		numKeyboard.add('*', (Button)findViewById(R.id.buttonAsterisk));
 		
 		setEnabled(false);
+		
+		recognizeredText = "";
 	}
 
 	public void setStateButtonText(String text) 
@@ -121,17 +126,19 @@ public class MainActivity extends Activity {
 	
 	public void clearText() 
 	{
-		recognizeredText.setText("");
+		recognizeredText = "";
+		recognizeredEditText.setText("");
 	}
 	
-	public void addText(String c) 
-	{//Todo: zmieniæ na char
-		recognizeredText.setText(c);
+	public void addText(Character c) 
+	{
+		recognizeredText += c;
+		recognizeredEditText.setText(recognizeredText);
 	}
 	
 	public void setEnabled(boolean enabled) 
 	{
-		recognizeredText.setEnabled(enabled);
+		recognizeredEditText.setEnabled(enabled);
 		numKeyboard.setEnabled(enabled);
 	}
 	public void setAciveKey(char key)
@@ -156,7 +163,7 @@ public class MainActivity extends Activity {
 	        case R.id.send:
 	        	final Intent sendIntent = new Intent(android.content.Intent.ACTION_SEND);
 	        	sendIntent.setType("text/plain");
-	        	sendIntent.putExtra(android.content.Intent.EXTRA_TEXT, "123#");
+	        	sendIntent.putExtra(android.content.Intent.EXTRA_TEXT, recognizeredText);
 	        	startActivity(Intent.createChooser(sendIntent, getString(R.string.send)+":"));
 	        	break;
 	        case R.id.about:

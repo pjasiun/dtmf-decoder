@@ -3,23 +3,27 @@ package wpam.recognizer;
 
 public class Controller 
 {
-	boolean started;
+	private boolean started;
 	
-	RecordTask recordTask;
+	private RecordTask recordTask;	
+	private MainActivity mainActivity;
 	
-	MainActivity mainActivity;
+	private Recognizer recognizer;
+	private Character lastValue;
 	
 	public Controller(MainActivity mainActivity)
 	{
-		this.mainActivity = mainActivity; 
+		this.mainActivity = mainActivity;
+		recognizer = new Recognizer();
 	}
-
 
 	public void changeState() 
 	{
 		if (started == false)
 		{
 			started = true;
+			
+			lastValue = ' ';
 			
 			mainActivity.start();
 			
@@ -31,9 +35,32 @@ public class Controller
 			mainActivity.stop();
 			
 			recordTask.cancel(true);
+			
 		}
 	}
 
+	public void clear() {
+		mainActivity.clearText();
+	}
+	
+	public void updateSpectrum(Spectrum spectrum) 
+	{
+		spectrum.normalize();
+		mainActivity.drawSpectrum(spectrum);
+		
+		StatelessRecognizer statelessRecognizer = new StatelessRecognizer(spectrum);
+		
+		Character key = recognizer.getRecognizedKey(statelessRecognizer.getRecognizedKey());
+		
+		mainActivity.setAciveKey(key);
+		
+		if(key != ' ')
+			if(lastValue != key)
+				mainActivity.addText(key);
+		
+		lastValue = key;
+		
+	}
 
 	public boolean isStarted() {
 		return started;
@@ -45,19 +72,4 @@ public class Controller
 		return mainActivity.getAudioSource();
 	}
 
-
-	public void updateSpectrum(Spectrum spectrum) 
-	{
-		spectrum.normalize();
-		mainActivity.drawSpectrum(spectrum);
-		
-		Recognizer recognizer = new Recognizer(spectrum);
-		mainActivity.setAciveKey(recognizer.getRecognizedKey());
-		
-	}
-
-
-	public void clear() {
-		mainActivity.clearText();
-	}
 }

@@ -45,4 +45,19 @@ public class SpectrumFragment
 		
 		return ret;
 	}
+	
+	public int getMax()
+	{
+		int max = 0;
+		double maxValue = 0;
+		
+		for(int i = start; i <= end; ++i)
+			if(maxValue < spectrum.get(i))
+			{
+				maxValue = spectrum.get(i);
+				max = i;
+			}
+		
+		return max;
+	}
 }
