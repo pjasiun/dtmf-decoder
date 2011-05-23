@@ -3,6 +3,8 @@ package wpam.recognizer;
 import pl.polidea.apphance.Apphance;
 import android.R.string;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
@@ -129,13 +131,30 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
-	        case R.id.icon:     Toast.makeText(this, "You pressed the icon!", Toast.LENGTH_LONG).show();
-	                            break;
-	        case R.id.text:     Toast.makeText(this, "You pressed the text!", Toast.LENGTH_LONG).show();
-	                            break;
-	        case R.id.icontext: Toast.makeText(this, "You pressed the icon and text!", Toast.LENGTH_LONG).show();
-	                            break;
+	        case R.id.icon:
+	        	Intent intent = new Intent(this, HistoryActivity.class);
+	        	startActivity(intent);
+	            break;
+	        case R.id.text:
+	        	final Intent sendIntent = new Intent(android.content.Intent.ACTION_SEND);
+	        	sendIntent.setType("text/plain");
+	        	sendIntent.putExtra(android.content.Intent.EXTRA_TEXT, "123#");
+	        	startActivity(Intent.createChooser(sendIntent, "Wyœlij:"));
+	        	break;
+	        case R.id.icontext: //Toast.makeText(this, "Komunikat!", Toast.LENGTH_LONG).show();
+	        	AlertDialog.Builder aboutBuilder = new AlertDialog.Builder(this);
+	        	aboutBuilder.setMessage("O programie...");
+	        	//TODO: aboutBuilder.setIcon(arg0)
+	        	AlertDialog about = aboutBuilder.create();
+	        	about.show();
+	            break;
 	    }
 	    return true;
+	}
+	
+	@Override
+	protected void onPause() {
+		// TODO Zapis historii wybranych munerów
+		super.onPause();
 	}
 }

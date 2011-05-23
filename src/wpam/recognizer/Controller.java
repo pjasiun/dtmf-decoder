@@ -59,6 +59,6 @@ public class Controller
 
 
 	public void clear() {
-		mainActivity.clearText();		
+		mainActivity.clearText();
 	}
 }
