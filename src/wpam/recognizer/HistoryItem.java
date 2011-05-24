@@ -1,17 +1,34 @@
 package wpam.recognizer;
 
-public class HistoryItem 
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+public class HistoryItem implements Serializable
 {
-//	Date timestamp;
+	String dataTime;
 	String text;
+	
+	public HistoryItem(final String text) 
+	{
+		this.text = text;
+		this.dataTime = now();
+	}
+	
+	private static String now()
+	{
+		final Calendar cal = Calendar.getInstance();
+		final SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy (HH:mm)");
+		return sdf.format(cal.getTime());
+		}
 	
 	public String getText() 
 	{
-		return "123#";
+		return text;
 	}
 	
 	public String getFormatedTimestamp() 
 	{
-		return "31.05.1987 (02:13)";
+		return dataTime;
 	}
 }

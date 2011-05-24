@@ -10,7 +10,7 @@ public class Controller
 	
 	private Recognizer recognizer;
 	private Character lastValue;
-	
+		
 	public Controller(MainActivity mainActivity)
 	{
 		this.mainActivity = mainActivity;

@@ -28,18 +28,16 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 
 	private Button stateButton;
-
-	private Button clearButton;
-	
+	private Button clearButton;	
 	private EditText recognizeredEditText;
-
-	private SpectrumView spectrumView;
-	
+	private SpectrumView spectrumView;	
 	private NumericKeyboard numKeyboard;
 	
 	Controller controller; 
 	
 	private String recognizeredText;
+
+	History history;
 	
 	public static final String APP_KEY = "806785c1fb7aed8a867039282bc21993eedbc4e4";
 	
@@ -91,11 +89,9 @@ public class MainActivity extends Activity {
 		setEnabled(false);
 		
 		recognizeredText = "";
-	}
-
-	public void setStateButtonText(String text) 
-	{
 		
+		history = new History(this);
+		history.load();
 	}
 	
 	public void start()
@@ -106,6 +102,8 @@ public class MainActivity extends Activity {
 	
 	public void stop()
 	{
+		history.add(recognizeredText);
+		
 		stateButton.setText(R.string.start);
 		setEnabled(false);
 	}
@@ -126,6 +124,8 @@ public class MainActivity extends Activity {
 	
 	public void clearText() 
 	{
+		history.add(recognizeredText);
+		
 		recognizeredText = "";
 		recognizeredEditText.setText("");
 	}
@@ -157,25 +157,42 @@ public class MainActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
 	        case R.id.history:
-	        	Intent intent = new Intent(this, HistoryActivity.class);
-	        	startActivity(intent);
+	        	showHistory();
 	            break;
 	        case R.id.send:
-	        	final Intent sendIntent = new Intent(android.content.Intent.ACTION_SEND);
-	        	sendIntent.setType("text/plain");
-	        	sendIntent.putExtra(android.content.Intent.EXTRA_TEXT, recognizeredText);
-	        	startActivity(Intent.createChooser(sendIntent, getString(R.string.send)+":"));
+	        	sendRecognizeredText();
 	        	break;
 	        case R.id.about:
-	        	AlertDialog about = new AlertDialog.Builder(this).create();
-	        	
-	        	about.setTitle(getString(R.string.app_name)+" ("+getVersion()+")");
-	        	about.setIcon(R.drawable.icon);
-	        	about.setMessage(getString(R.string.about_text));
-	        	about.show();
+	        	showAbout();
 	            break;
 	    }
 	    return true;
+	}
+
+	private void showHistory()
+	{
+		history.add(recognizeredText);
+		history.save();		
+		
+		Intent intent = new Intent(this, HistoryActivity.class);
+		startActivity(intent);
+	}
+
+	private void sendRecognizeredText() {
+		final Intent sendIntent = new Intent(android.content.Intent.ACTION_SEND);
+		sendIntent.setType("text/plain");
+		sendIntent.putExtra(android.content.Intent.EXTRA_TEXT, recognizeredText);
+		startActivity(Intent.createChooser(sendIntent, getString(R.string.send)+":"));
+	}
+
+	private void showAbout() 
+	{
+		AlertDialog about = new AlertDialog.Builder(this).create();
+		
+		about.setTitle(getString(R.string.app_name)+" ("+getVersion()+")");
+		about.setIcon(R.drawable.icon);
+		about.setMessage(getString(R.string.about_text));
+		about.show();
 	}
 	
 	private String getVersion() 
@@ -192,8 +209,11 @@ public class MainActivity extends Activity {
 	}
 	
 	@Override
-	protected void onPause() {
-		// TODO Zapis historii wybranych munerów
-		super.onPause();
+	protected void onDestroy() 
+	{
+		history.add(recognizeredText);
+		
+		history.save();
+		super.onDestroy();
 	}
 }
