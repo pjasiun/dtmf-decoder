@@ -1,20 +1,22 @@
 package wpam.recognizer;
 
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+
 
 public class Controller 
 {
 	private boolean started;
 	
 	private RecordTask recordTask;	
+	private RecognizerTask recognizerTask;	
 	private MainActivity mainActivity;
-	
-	private Recognizer recognizer;
+
 	private Character lastValue;
 		
 	public Controller(MainActivity mainActivity)
 	{
 		this.mainActivity = mainActivity;
-		recognizer = new Recognizer();
 	}
 
 	public void changeState() 
@@ -25,10 +27,16 @@ public class Controller
 			
 			lastValue = ' ';
 			
+			BlockingQueue<Spectrum> blockingQueue = new LinkedBlockingQueue<Spectrum>();
+			
 			mainActivity.start();
 			
-			recordTask = new RecordTask(this);
+			recordTask = new RecordTask(this,blockingQueue);
+			
+			recognizerTask = new RecognizerTask(this,blockingQueue);
+			
 			recordTask.execute();
+			recognizerTask.execute();
 		} else {
 			started = false;
 			
@@ -42,25 +50,6 @@ public class Controller
 	public void clear() {
 		mainActivity.clearText();
 	}
-	
-	public void updateSpectrum(Spectrum spectrum) 
-	{
-		spectrum.normalize();
-		mainActivity.drawSpectrum(spectrum);
-		
-		StatelessRecognizer statelessRecognizer = new StatelessRecognizer(spectrum);
-		
-		Character key = recognizer.getRecognizedKey(statelessRecognizer.getRecognizedKey());
-		
-		mainActivity.setAciveKey(key);
-		
-		if(key != ' ')
-			if(lastValue != key)
-				mainActivity.addText(key);
-		
-		lastValue = key;
-		
-	}
 
 	public boolean isStarted() {
 		return started;
@@ -71,5 +60,20 @@ public class Controller
 	{
 		return mainActivity.getAudioSource();
 	}
+	
+	public void spectrumReady(Spectrum spectrum) 
+	{
+		mainActivity.drawSpectrum(spectrum);
+	}
 
+	public void keyReady(char key) 
+	{
+		mainActivity.setAciveKey(key);
+		
+		if(key != ' ')
+			if(lastValue != key)
+				mainActivity.addText(key);
+		
+		lastValue = key;
+	}
 }

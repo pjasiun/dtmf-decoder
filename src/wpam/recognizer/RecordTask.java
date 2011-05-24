@@ -1,5 +1,7 @@
 package wpam.recognizer;
 
+import java.util.concurrent.BlockingQueue;
+
 import math.FFT;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
@@ -15,19 +17,18 @@ public class RecordTask extends AsyncTask<Void, Object, Void> {
 	int blockSize = 1024;
 	
 	Controller controller;
+	BlockingQueue<Spectrum> blockingQueue;
 
-	public RecordTask(Controller controller) {
+	public RecordTask(Controller controller, BlockingQueue<Spectrum> blockingQueue) {
 		this.controller = controller;
+		this.blockingQueue = blockingQueue;
 	}
 
 	@Override
 	protected Void doInBackground(Void... params) {
 		try {
-			int bufferSize = AudioRecord.getMinBufferSize(frequency,
-					channelConfiguration, audioEncoding);
+			int bufferSize = AudioRecord.getMinBufferSize(frequency, channelConfiguration, audioEncoding);
 
-			
-			
 			AudioRecord audioRecord = new AudioRecord(controller.getAudioSource(), frequency, channelConfiguration, audioEncoding, bufferSize);
 
 			short[] buffer = new short[blockSize];
@@ -37,17 +38,24 @@ public class RecordTask extends AsyncTask<Void, Object, Void> {
 
 			while (controller.isStarted()) {
 									
+//				int bufferReadSize = audioRecord.read(buffer, 0, blockSize);
+//				
+//				DataBlock dataBlock = new DataBlock(buffer, bufferSize, bufferReadSize);
+//
+//				Spectrum spectrum = dataBlock.FFT();
+				
 				int bufferReadResult = audioRecord.read(buffer, 0,
 						blockSize);
 				
+				
 				for (int i = 0; i < blockSize && i < bufferReadResult; i++) {
-					toTransform[i] = (double) buffer[i] / 32768.0;
+					toTransform[i] = (double) buffer[i];
 				}
 				
 				//transformer.ft(toTransform);
 				Spectrum spectrum = new Spectrum(FFT.magnitudeSpectrum(toTransform));
 				
-				publishProgress(spectrum);
+				blockingQueue.put(spectrum);
 			}
 
 			audioRecord.stop();
@@ -56,9 +64,5 @@ public class RecordTask extends AsyncTask<Void, Object, Void> {
 		}
 
 		return null;
-	}
-	
-	protected void onProgressUpdate(Object... params) {
-		controller.updateSpectrum((Spectrum) params[0]);
 	}
 }
