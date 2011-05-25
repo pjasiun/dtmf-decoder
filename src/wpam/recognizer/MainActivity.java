@@ -221,4 +221,12 @@ public class MainActivity extends Activity {
 		history.save();
 		super.onDestroy();
 	}
+	
+	@Override
+	protected void onPause()
+	{
+		if (controller.isStarted())
+			controller.changeState();
+		super.onPause();
+	}
 }

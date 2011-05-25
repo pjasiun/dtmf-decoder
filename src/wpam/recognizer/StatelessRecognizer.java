@@ -34,8 +34,8 @@ public class StatelessRecognizer {
 
 	public char getRecognizedKey()
 	{
-		SpectrumFragment lowFragment= new SpectrumFragment(40, 65, spectrum);
-		SpectrumFragment highFragment= new SpectrumFragment(75, 100, spectrum);
+		SpectrumFragment lowFragment= new SpectrumFragment(0, 75, spectrum);
+		SpectrumFragment highFragment= new SpectrumFragment(75, 150, spectrum);
 		
 		int lowMax = lowFragment.getMax();
 		int highMax = highFragment.getMax();

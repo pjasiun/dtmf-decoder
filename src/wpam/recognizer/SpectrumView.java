@@ -33,12 +33,12 @@ public class SpectrumView
 			
 			int upy = 100;
 
-			if(i >= 50 && i <= 130)
-				paint.setColor(Color.BLUE);
-			else if(i >= 150 && i <= 200)
-				paint.setColor(Color.CYAN);
+			if(i >= 40 && i <= 65)
+				paint.setColor(Color.rgb(130, 130, 130));
+			else if(i >= 75 && i <= 100)
+				paint.setColor(Color.rgb(130, 130, 130));
 			else
-				paint.setColor(Color.GREEN);
+				paint.setColor(Color.WHITE);
 			
 			canvas.drawLine(i, downy, i, upy, paint);
 		}
