@@ -22,7 +22,7 @@ public class Recognizer
 	{
 		history.add(recognizedKey);
 		
-		if(history.size() <= 3)
+		if(history.size() <= 4)
 			return ' ';
 		
 		history.remove(0);
@@ -35,10 +35,9 @@ public class Recognizer
 				count++;
 		}
 		
-		if(count >= 2)
+		if(count >= 3)
 			acctualVaue = recognizedKey;
 		
 		return acctualVaue;
 	}
-
 }

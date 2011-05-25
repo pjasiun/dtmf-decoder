@@ -11,6 +11,7 @@ public class Controller
 	private RecordTask recordTask;	
 	private RecognizerTask recognizerTask;	
 	private MainActivity mainActivity;
+	BlockingQueue<DataBlock> blockingQueue;
 
 	private Character lastValue;
 		
@@ -23,11 +24,10 @@ public class Controller
 	{
 		if (started == false)
 		{
-			started = true;
 			
 			lastValue = ' ';
 			
-			BlockingQueue<Spectrum> blockingQueue = new LinkedBlockingQueue<Spectrum>();
+			blockingQueue = new LinkedBlockingQueue<DataBlock>();
 			
 			mainActivity.start();
 			
@@ -37,13 +37,16 @@ public class Controller
 			
 			recordTask.execute();
 			recognizerTask.execute();
+			
+			started = true;
 		} else {
-			started = false;
 			
 			mainActivity.stop();
 			
+			recognizerTask.cancel(true);
 			recordTask.cancel(true);
 			
+			started = false;
 		}
 	}
 
@@ -75,5 +78,10 @@ public class Controller
 				mainActivity.addText(key);
 		
 		lastValue = key;
+	}
+	
+	public void debug(String text) 
+	{
+		mainActivity.setText(text);
 	}
 }

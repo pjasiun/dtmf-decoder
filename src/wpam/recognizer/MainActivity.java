@@ -135,6 +135,11 @@ public class MainActivity extends Activity {
 		recognizeredText += c;
 		recognizeredEditText.setText(recognizeredText);
 	}
+
+	public void setText(String text)
+	{
+		recognizeredEditText.setText(text);		
+	}
 	
 	public void setEnabled(boolean enabled) 
 	{
