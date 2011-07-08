@@ -3,6 +3,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
-	<classpathentry kind="lib" path="D:/Piotr/workspace/android/recognizer/apphance.jar"/>
+	<classpathentry kind="lib" path="apphance.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
